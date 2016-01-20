@@ -20,6 +20,11 @@ public class QueryController {
     @Autowired
     QueryService queryService;
 
+    @RequestMapping(value="/alpha", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Country[]> getCountriesByAlpha3(@RequestParam String codes){
+        return new ResponseEntity<>(queryService.getCountriesByAlpha3(codes), HttpStatus.OK);
+    }
+
     @RequestMapping(value="/border/{qty:[\\d]+}", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Country[]> getCountriesWithBorderCount(@PathVariable Integer qty){
         return new ResponseEntity<>(queryService.getByBorderCount(qty), HttpStatus.OK);

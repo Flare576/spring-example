@@ -22,6 +22,16 @@ public class QueryService {
         this.restCountriesProxy = restCountriesProxy;
     }
 
+    public Country[] getCountriesByAlpha3( String codes){
+        List<Country> mapped = new ArrayList<>();
+        String[] codesA = codes.split(",");
+        Map<String, Country> countries = restCountriesProxy.getCountries();
+        for(String code : codesA){
+            mapped.add(countries.get(code));
+        }
+        return mapped.toArray(new Country[mapped.size()]);
+    }
+
     public Country[] getByBorderCount( Integer qty){
         return getByFieldCount("getBorders", qty);
     }
@@ -112,6 +122,7 @@ public class QueryService {
             int maximumQty = 0;
             try {
                 Method method = Country.class.getMethod(methodName);
+                //todo solve ConcurrentModificationException
                 for (Country country : countries.values()) {
                     int length = ((Object[]) method.invoke(country)).length;
                     if(!resultSet.containsKey(length)){

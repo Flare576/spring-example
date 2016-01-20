@@ -1,0 +1,8 @@
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+section{
+    width:600px;
+}
+
+.listed-country{
+    display:inline-block;
+}

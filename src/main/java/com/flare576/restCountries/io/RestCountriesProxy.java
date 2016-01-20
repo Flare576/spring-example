@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Flare576 on 1/18/2016.
@@ -40,7 +41,7 @@ public class RestCountriesProxy {
     public RestCountriesProxy(CloseableHttpClient httpClient){
         this.httpClient = httpClient;
 
-        this.countries = new HashMap<>();
+        this.countries = new ConcurrentHashMap<>();
         lastUpdate = null;
         objectMapper = new ObjectMapper();
     }
