@@ -43,6 +43,4 @@
             templateUrl: "html/stats-about.html"
         };
     });
-
-
 })();

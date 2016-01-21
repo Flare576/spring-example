@@ -16,7 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by Flare576 on 1/18/2016.
@@ -27,8 +29,9 @@ public class QueryServiceTest extends BaseTest {
     RestCountriesProxy restCountriesProxy;
 
     private static ObjectMapper objectMapper = new ObjectMapper();
-    private QueryService queryService;
     private static Map<String,Country> countries;
+
+    private QueryService queryService;
 
     @BeforeClass
     public static void classSetup() throws IOException {
@@ -45,9 +48,10 @@ public class QueryServiceTest extends BaseTest {
     @Before
     public void setup() throws IOException {
         MockitoAnnotations.initMocks(this);
-        queryService = new QueryServiceImpl(restCountriesProxy);
+        Date notToLongAgo = new Date( new Date().getTime() - 1000*60 ); //1 minute ago
+        when( restCountriesProxy.getLastUpdate()).thenReturn( notToLongAgo );
         when( restCountriesProxy.getCountries()).thenReturn(countries);
-        when( restCountriesProxy.getLastUpdate()).thenReturn(new Date());
+        queryService = new QueryServiceImpl(restCountriesProxy);
     }
 
     @Test
@@ -58,7 +62,7 @@ public class QueryServiceTest extends BaseTest {
         result = queryService.getByBorderCount(1);
         assertEquals(0, result.length);
 
-        verify(restCountriesProxy,times(1)).getLastUpdate();
+        verify(restCountriesProxy,times(2)).getLastUpdate();
     }
 
     @Test
@@ -81,7 +85,7 @@ public class QueryServiceTest extends BaseTest {
         result = queryService.getByTimezoneCount(0);
         assertEquals(0, result.length);
 
-        verify(restCountriesProxy,times(1)).getLastUpdate();
+        verify(restCountriesProxy,times(2)).getLastUpdate();
     }
 
     @Test

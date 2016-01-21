@@ -14,7 +14,9 @@
         self.timezoneRange = 0;
 
         self.fetchSingles = function(){
-            self.fetchTimezones(0).then(function(d){ self.noTimezone= d.length;});
+            self.fetchTimezones(0).then(function(d){ self.noTimezone= d.length;},
+                function(errResponse){
+                });
         };
 
         self.updateCountries = function(){
@@ -22,11 +24,13 @@
                 .then(
                     function(d){
                         self.countries = d;
+                        //Update the other values, too, to avoid presenting stale data
+                        self.fetchSingles();
+                        self.fetchMaxTimezones();
+                    },
+                    function(errResponse){
                     }
                 );
-            //Update the other values, too, to avoid presenting stale data
-            self.fetchSingles();
-            self.fetchMaxTimezones();
         };
 
         self.fetchTimezones = function(qty){
@@ -36,7 +40,6 @@
                         return d;
                     },
                     function(errResponse){
-                        //todo error stuff
                     }
                 );
         };
@@ -48,7 +51,6 @@
                         self.maxTimezones = d;
                     },
                     function(errResponse){
-                        //todo error stuff
                     }
                 );
         };

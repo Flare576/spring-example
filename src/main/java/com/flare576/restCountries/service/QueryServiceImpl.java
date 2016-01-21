@@ -17,20 +17,21 @@ import java.util.Map;
  * Created by Flare576 on 1/18/2016.
  */
 public class QueryServiceImpl implements QueryService {
-    private Log log = LogFactory.getLog(QueryServiceImpl.class);
-    private static Map<String, QueryResult> resultsCache;
     private static final String MAX_PREFACE = "max_qty_";
     private static final String QTY_PREFACE = "qty_";
-    private static final String BORDERS = "getBorders"; 
+    private static final String BORDERS = "getBorders";
     private static final String TIMEZONES = "getTimezones";
-    private static Map<String, Boolean> isRefreshing;
+    private final Log log = LogFactory.getLog(QueryServiceImpl.class);
+    private final Map<String, QueryResult> resultsCache = new HashMap<>();
     RestCountriesProxy restCountriesProxy;
 
     @Autowired
     public QueryServiceImpl(RestCountriesProxy restCountriesProxy){
-        resultsCache = new HashMap<>();
-        isRefreshing = new HashMap<>();
         this.restCountriesProxy = restCountriesProxy;
+
+        //setup the caches for known fields. If we started doing more than just the 2, an Enumeration class would be better
+        refreshFieldStats(BORDERS);
+        refreshFieldStats(TIMEZONES);
     }
 
     @Override
@@ -115,7 +116,7 @@ public class QueryServiceImpl implements QueryService {
      * Countries.
      *
      * @param methodName String representation of the method inside of Country to call, e.g., getBorders or getTimeZones
-     * @return
+     * @return All the countries which have the maximum count of the Field
      */
     private Country[] getByMaxFieldCount( String methodName ){
         refreshFieldStats(methodName);
@@ -126,62 +127,50 @@ public class QueryServiceImpl implements QueryService {
 
     /**
      * Checks a known results cache entry for its lastRun value, then compares it against the Proxy's lastUpdate.
-     * If the LastRun is older than the result set, the stats need to be re-run.
+     * If the LastRun is older than the result set, the stats need to be re-run. Synchronized to avoid race-conditions and
+     * simultaneous cache refreshes.
      *
      * @param methodName String representation of the method inside of Country to call, e.g., getBorders or getTimeZones
      */
-    private void refreshFieldStats(String methodName){
+    private synchronized void refreshFieldStats(String methodName) {
         Map<String, Country> countries = restCountriesProxy.getCountries();
         //this key will always be set on a refresh, so is a good indicator of the age of the cache
         String cacheCheck = MAX_PREFACE + methodName;
         QueryResult cached = resultsCache.get(cacheCheck);
-        if(null == cached || cached.getLastRun().before(restCountriesProxy.getLastUpdate())) {
-            if (isRefreshing.containsKey(cacheCheck)) {
-                while (isRefreshing.containsKey(cacheCheck)) {
-                    log.info("Waiting for cache for " + cacheCheck);
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+        if (null == cached || cached.getLastRun().before(restCountriesProxy.getLastUpdate())) {
+            log.info("Refreshing cache for " + cacheCheck);
+            //Build a result set for each qty.
+            Map<Integer, List<Country>> resultSet = new HashMap<>();
+            //And track the maximum Quantity found
+            int maximumQty = 0;
+            try {
+                Method method = Country.class.getMethod(methodName);
+                for (Country country : countries.values()) {
+                    Object[] data = (Object[]) method.invoke(country);
+                    int length = 0;
+                    if (null != data) {
+                        length = data.length;
                     }
-                }
-            } else {
-                isRefreshing.put(cacheCheck,true);
-                log.info("Refreshing cache for " + cacheCheck);
-                //Build a result set for each qty.
-                Map<Integer, List<Country>> resultSet = new HashMap<>();
-                //And track the maximum Quantity found
-                int maximumQty = 0;
-                try {
-                    Method method = Country.class.getMethod(methodName);
-                    for (Country country : countries.values()) {
-                        Object[] data = (Object[]) method.invoke(country);
-                        int length = 0;
-                        if (null != data) {
-                            length = data.length;
-                        }
-                        if (!resultSet.containsKey(length)) {
-                            resultSet.put(length, new ArrayList<Country>());
-                        }
-                        resultSet.get(length).add(country);
-                        maximumQty = Math.max(maximumQty, length);
+                    if (!resultSet.containsKey(length)) {
+                        resultSet.put(length, new ArrayList<Country>());
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    resultSet.get(length).add(country);
+                    maximumQty = Math.max(maximumQty, length);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
 
-                //Insert our max count
-                String cacheName = MAX_PREFACE + methodName;
-                resultsCache.put(cacheName, new QueryResult(maximumQty));
+            //Insert our max count
+            String cacheName = MAX_PREFACE + methodName;
+            resultsCache.put(cacheName, new QueryResult(maximumQty));
 
-                //Insert each of the known lengths in their own cache entry for fast access upon request
-                for (Integer length : resultSet.keySet()) {
-                    QueryResult temp = new QueryResult(resultSet.get(length));
-                    cacheName = QTY_PREFACE + methodName + "_" + length;
-                    resultsCache.put(cacheName, temp);
-                }
-                isRefreshing.remove(cacheCheck);
+            //Insert each of the known lengths in their own cache entry for fast access upon request
+            for (Integer length : resultSet.keySet()) {
+                QueryResult temp = new QueryResult(resultSet.get(length));
+                cacheName = QTY_PREFACE + methodName + "_" + length;
+                resultsCache.put(cacheName, temp);
             }
         }
     }
