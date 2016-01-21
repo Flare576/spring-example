@@ -3,6 +3,9 @@ package com.flare576.restCountries.configuration;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**
+ * Most basic Initializer; pass the project config to getRootConfigClasses, set the ServletMappings to root, and Spring
+ * does the rest.
+ *
  * Created by Flare576 on 1/18/2016.
  */
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {

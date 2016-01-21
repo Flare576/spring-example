@@ -73,6 +73,7 @@ public class RestCountriesProxyTest extends BaseTest {
         ReflectionTestUtils.setField(restCountriesProxy, "cacheMinutes", "0");
         doCallRealMethod().when(restCountriesProxy,"refresh");
         Map<String,Country> countries = restCountriesProxy.getCountries();
+        assertEquals(2, countries.size());
         countries = restCountriesProxy.getCountries();
         assertEquals(2, countries.size());
         verifyPrivate(restCountriesProxy,times(2)).invoke("refresh");
@@ -81,6 +82,7 @@ public class RestCountriesProxyTest extends BaseTest {
     @Test
     public void cacheGood_happy() throws Exception {
         Map<String,Country> countries = restCountriesProxy.getCountries();
+        assertEquals(2, countries.size());
         countries = restCountriesProxy.getCountries();
         assertEquals(2, countries.size());
         verifyPrivate(restCountriesProxy,times(1)).invoke("refresh");

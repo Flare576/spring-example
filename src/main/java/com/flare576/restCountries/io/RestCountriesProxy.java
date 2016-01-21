@@ -17,24 +17,25 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created by Flare576 on 1/18/2016.
- *
  * This class serves as the provider of the full Countries list from the external URL provided in the properties file.
- * It maintains a cache of the list locally for a configurable period of time for two primary reasons:
+ * It maintains a cache of the list locally for a configurable period of time for three primary reasons:
  * 1. Country data is unlikely to change rapidly
- * 2. The only known provider for the data is a donation-driven website whose bandwidth is unknown
+ * 2. External calls are expensive
+ * 3. The only known provider for the data is a donation-driven website whose bandwidth is unknown
+ *
+ * Created by Flare576 on 1/18/2016.
  */
 public class RestCountriesProxy {
-    private Log log = LogFactory.getLog(RestCountriesProxy.class);
-    private CloseableHttpClient httpClient;
+    private final Log log = LogFactory.getLog(RestCountriesProxy.class);
+    private final CloseableHttpClient httpClient;
     @Value("${proxy.cache.minutes}")
     private String cacheMinutes;
     @Value("${proxy.external.url}")
     private String restCountriesUrl;
 
     private Date lastUpdate;
-    private Map<String, Country> countries;
-    private ObjectMapper objectMapper;
+    private final Map<String, Country> countries;
+    private final ObjectMapper objectMapper;
 
 
     @Autowired

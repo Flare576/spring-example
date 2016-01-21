@@ -17,6 +17,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 /**
+ * Project configuration. Sets up resource handlers, view resolvers, and Beans for the project.
+ *
  * Created by Flare576 on 1/18/2016.
  */
 @Configuration
@@ -25,11 +27,9 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @ComponentScan("com.flare576.restCountries")
 public class RestCountriesConfig extends WebMvcConfigurerAdapter {
 
-    // equivalents for <mvc:resources/> tags
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/css/**").addResourceLocations("/WEB-INF/css/");
-        registry.addResourceHandler("/img/**").addResourceLocations("/WEB-INF/img/");
         registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/js/");
         registry.addResourceHandler("/html/**").addResourceLocations("/WEB-INF/html/");
     }

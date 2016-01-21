@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
+ * All v1 endpoints. If this project was extend, we'd probably want to split this into controllers per type:
+ * /v1/border in BorderController
+ * /v1/timezone in TimezoneController
+ * etc.
+ *
  * Created by Flare576 on 1/18/2016.
  */
 @Controller
@@ -37,8 +42,8 @@ public class QueryController {
     }
 
     @RequestMapping(value="/border/maxQty", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getCountriesMaxBorderCount(){
-        return new ResponseEntity(queryService.getMaxBorderCount(), HttpStatus.OK);
+    public ResponseEntity<Integer> getCountriesMaxBorderCount(){
+        return new ResponseEntity<>(queryService.getMaxBorderCount(), HttpStatus.OK);
     }
 
     @RequestMapping(value="/timezone/{qty:[\\d]+}", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -52,7 +57,7 @@ public class QueryController {
     }
 
     @RequestMapping(value="/timezone/maxQty", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getCountriesMaxTimezoneCount(){
-        return new ResponseEntity(queryService.getMaxTimezoneCount(), HttpStatus.OK);
+    public ResponseEntity<Integer> getCountriesMaxTimezoneCount(){
+        return new ResponseEntity<>(queryService.getMaxTimezoneCount(), HttpStatus.OK);
     }
 }

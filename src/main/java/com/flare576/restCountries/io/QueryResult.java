@@ -7,15 +7,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Flare576 on 1/18/2016.
- *
  * Instead of holding the actual result set, which would be an unnecessary use of memory, we simply store the keys
  * to the Countries in the result. Additionally, the lastRun time is also captured upon creation, allowing comparison
  * to the primary cache's lastUpdate.
  *
+ * Created by Flare576 on 1/18/2016.
+ *
  */
 public class QueryResult {
-    private Date lastRun;
+    private final Date lastRun;
     private String[] keys;
     private Integer intVal;
     private String stringVal;

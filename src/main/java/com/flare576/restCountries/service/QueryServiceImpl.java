@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * This implementation of QueryService utilizes a caching system as well as a generic (Reflection-drive) resolver.
+ *
  * Created by Flare576 on 1/18/2016.
  */
 public class QueryServiceImpl implements QueryService {
@@ -23,7 +25,7 @@ public class QueryServiceImpl implements QueryService {
     private static final String TIMEZONES = "getTimezones";
     private final Log log = LogFactory.getLog(QueryServiceImpl.class);
     private final Map<String, QueryResult> resultsCache = new HashMap<>();
-    RestCountriesProxy restCountriesProxy;
+    final RestCountriesProxy restCountriesProxy;
 
     @Autowired
     public QueryServiceImpl(RestCountriesProxy restCountriesProxy){
