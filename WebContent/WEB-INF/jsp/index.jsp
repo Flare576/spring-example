@@ -11,7 +11,7 @@
     <title>Nations of the World</title>
     <link rel="stylesheet" type="text/css" href="css/lib/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="css/lib/bootstrap-theme.min.css" />
-    <script type="text/javascript" src="js/lib/angular.js"></script>
+    <script type="text/javascript" src="js/lib/angular.min.js"></script>
     <script type="text/javascript" src="js/lib/angular-animate.min.js"></script>
     <script type="text/javascript" src="js/lib/ui-bootstrap-tpls-1.1.0.min.js"></script>
 
