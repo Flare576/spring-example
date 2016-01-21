@@ -1,6 +1,7 @@
 package com.flare576.restCountries.io;
 
 import com.flare576.restCountries.BaseTest;
+import com.flare576.restCountries.model.Country;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.StringEntity;
@@ -17,7 +18,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -63,7 +63,7 @@ public class RestCountriesProxyTest extends BaseTest {
     @Test
     public void noCache_happy() throws Exception {
         Map<String,Country> countries = restCountriesProxy.getCountries();
-        assertEquals(countries.size(), 2);
+        assertEquals(2, countries.size());
         verifyPrivate(restCountriesProxy,times(1)).invoke("refresh");
     }
 
@@ -74,7 +74,7 @@ public class RestCountriesProxyTest extends BaseTest {
         doCallRealMethod().when(restCountriesProxy,"refresh");
         Map<String,Country> countries = restCountriesProxy.getCountries();
         countries = restCountriesProxy.getCountries();
-        assertEquals(countries.size(), 2);
+        assertEquals(2, countries.size());
         verifyPrivate(restCountriesProxy,times(2)).invoke("refresh");
     }
 
@@ -82,7 +82,7 @@ public class RestCountriesProxyTest extends BaseTest {
     public void cacheGood_happy() throws Exception {
         Map<String,Country> countries = restCountriesProxy.getCountries();
         countries = restCountriesProxy.getCountries();
-        assertEquals(countries.size(), 2);
+        assertEquals(2, countries.size());
         verifyPrivate(restCountriesProxy,times(1)).invoke("refresh");
     }
 

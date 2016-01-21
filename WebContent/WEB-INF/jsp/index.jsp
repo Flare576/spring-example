@@ -17,12 +17,13 @@
 
     <link rel="stylesheet" type="text/css" href="css/index.css" />
     <script type="text/javascript" src="js/app.js"></script>
-    <script type="text/javascript" src="js/genericQuery.js"></script>
+    <script type="text/javascript" src="js/countryQuery.js"></script>
     <script type="text/javascript" src="js/borders.js"></script>
+    <script type="text/javascript" src="js/timezones.js"></script>
 </head>
 <body>
     <h1>Nations of the World</h1>
-    <h2>Brought to you by <span style="text-decoration: line-through;">Yakko Warner</span> Jeremy Scherer</h2>
+    <h2>Brought to you by <a href="https://www.youtube.com/watch?v=x88Z5txBc7w"><span style="text-decoration: line-through;">Yakko Warner</span></a> Jeremy Scherer</h2>
     <stats-tabs></stats-tabs>
 </body>
 </html>

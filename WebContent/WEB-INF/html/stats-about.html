@@ -1,1 +1,14 @@
-Hia! This is the Tool Info panel!
+<p>This tool was built on a Spring MVC backend with an Angular driven UI. It interacts with
+    <a href="http://restcountries.eu/">http://restcountries.eu/</a> to get the data for its reports, caching the data with a
+    configurable refresh period.</p>
+<p>The Spring implementation utilizes 100% <a href="http://docs.spring.io/spring-javaconfig/docs/1.0.0.M4/reference/html/">Java Config</a>.
+    This was chosen over an XML implementation for two reasons: 1) it eliminates a layer of abstraction unnecessary for
+    this project, 2) The last service I created utilized Java Config.</p>
+<p>The implementation of the Query interface utilizes an in-memory cache with thread-aware waiting. If the performance of
+    the system suffered too greatly on the hold-pattern of the cache, it could be resolved by increasing the cache duration,
+    or by allowing the system to return the old cache version while it's being refreshed.</p>
+<p>Additionally, both the UI and the Server-side Service utilize an extensible paradigm. The Server-side uses Reflection
+    to limit the amount of code necessary to query the List-based fields, and the UI makes use of the RESTful URL structure
+    by centralizing the actual $html calls and passing in fields. Querying against any of the other List-based statistics
+    would be (and was, after I wrote the first) straight forward.</p>
+<p>For testing, the backend utilizes JUnit with Mockito and PowerMock.</p>

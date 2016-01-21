@@ -1,8 +1,38 @@
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+.nav{
+    margin-bottom:10px;
+}
+
+.nav li{
+    background-color: #EEEEEE;
+}
+
 section{
     width:600px;
+    margin-left:20px;
 }
 
 .listed-country{
     display:inline-block;
+}
+
+.slider-div{
+    width:300px;
+    margin-left:10px;
+}
+.slider-current{
+    height:20px;
+    width:50%;
+    text-align: right;
+    float:left
+}
+
+.slider-min{
+    float:left;
+    height:20px;
+}
+
+.slider-max{
+    float:right;
+    height:20px;
 }

@@ -1,7 +1,6 @@
 package com.flare576.restCountries.controller;
 
-import com.flare576.restCountries.io.Country;
-import com.flare576.restCountries.io.RestCountriesProxy;
+import com.flare576.restCountries.model.Country;
 import com.flare576.restCountries.service.QueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/v1")
 public class QueryController {
-//islands, most bordering, my choice
     @Autowired
     QueryService queryService;
 

@@ -2,7 +2,7 @@
  * Created by Flare576 on 1/19/2016.
  */
 (function(){
-    var app = angular.module("countries",["borders","ui.bootstrap"]);
+    var app = angular.module("countries",["borders","timezones","ui.bootstrap"]);
 
     app.directive("statsTabs", function() {
         return {

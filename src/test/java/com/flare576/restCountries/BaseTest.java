@@ -23,6 +23,10 @@ public class BaseTest {
      * Some sample JSON objects for the response
      */
 
+    public static final String USA_ALPHA3 = "USA";
+    public static final String MADAGASCAR_ALPHA3 = "MDG";
+    public static final String INVALID_ALPHA3 = "XXX";
+
     public static final String MADAGASCAR_JSON = "{\n" +
             "        \"name\": \"Madagascar\",\n" +
             "        \"capital\": \"Antananarivo\",\n" +

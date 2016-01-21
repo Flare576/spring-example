@@ -1,6 +1,9 @@
 package com.flare576.restCountries.io;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flare576.restCountries.model.Country;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -8,12 +11,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -26,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 2. The only known provider for the data is a donation-driven website whose bandwidth is unknown
  */
 public class RestCountriesProxy {
+    private Log log = LogFactory.getLog(RestCountriesProxy.class);
     private CloseableHttpClient httpClient;
     @Value("${proxy.cache.minutes}")
     private String cacheMinutes;
@@ -100,10 +102,8 @@ public class RestCountriesProxy {
                 this.countries.put(country.getAlpha3Code(), country);
             }
             lastUpdate = new Date();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.warn(e);
         }
     }
 }

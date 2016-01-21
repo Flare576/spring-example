@@ -12,11 +12,31 @@
         </div>
     </div>
 
-    <input type="range" ng-model="borderCtrl.bordersRange" min="0" max="{{borderCtrl.maxBorders}}" ng-change="borderCtrl.updateCountries()" />
 
+    <div class="slider-div">
+        <div class="slider-min">0</div>
+        <div class="slider-current">{{borderCtrl.bordersRange}}</div>
+        <div class="slider-max">{{borderCtrl.maxBorders}}</div>
+        <input
+                type="range"
+                ng-model-options='{ debounce: 500 }'
+                ng-model="borderCtrl.bordersRange"
+                min="0"
+                max="{{borderCtrl.maxBorders}}"
+                ng-change="borderCtrl.updateCountries()" />
+
+    </div>
+    <ng-pluralize count="borderCtrl.countries.length"
+                  when="{'0': 'No countries have {{borderCtrl.bordersRange}} country borders.',
+                     'one': '1 Country found having {{borderCtrl.bordersRange}} country borders.',
+                     'other': '{} Countries found having {{borderCtrl.bordersRange}} country borders.'}">
+    </ng-pluralize>
     <uib-accordion>
-        <uib-accordion-group heading="{{country.name}}" ng-repeat="country in borderCtrl.countries">
-            Bordering Countries:
+        <uib-accordion-group ng-repeat="country in borderCtrl.countries">
+            <uib-accordion-heading>
+                <div uib-popover-html="country.details" popover-placement="right" popover-trigger="mouseenter">{{country.name}}</div>
+            </uib-accordion-heading>
+            Bordering Countries: {{country.borders.length == 0 ? "None" : ""}}
             <div ng-repeat="borderCountry in country.borders">
                 <div class="listed-country" uib-popover-html="borderCtrl.relevant[borderCountry].details" popover-placement="right" popover-trigger="mouseenter">{{borderCtrl.relevant[borderCountry].name}}</div>
             </div>

@@ -2,83 +2,47 @@
  * Created by Flare576 on 1/20/2016.
  */
 (function(){
-    var app = angular.module("borders",["genericQuery"]);
+    var app = angular.module("borders",["countryQuery"]);
 
 
-
-    app.factory('BorderService', ['$http', '$sce', "CountryService", function($http,$sce,CountryService){
-        return {
-            fetchMaxBorders: function(){
-                return $http.get("/v1/border/maxQty")
-                    .then(
-                        function(response){
-                            return response.data;
-                        },
-                        function(errResponse){
-                            //todo error stuff
-                        }
-                    );
-            },
-            fetchBorders: function(qty){
-                return $http.get("/v1/border/" + qty)
-                    .then(
-                        function(response){
-                            return response.data;
-                        },
-                        function(errResponse){
-                            //todo error stuff
-                        }
-                    );
-            },
-            fetchRelevant: function(countries){
-                var allAplphas = [];
-                angular.forEach(countries, function(country){
-                    var borders = country.borders;
-                    angular.forEach(borders, function(borderCountry){
-                        if(allAplphas.indexOf(borderCountry) == -1){
-                            allAplphas.push(borderCountry);
-                        }
-                    });
-                });
-                return CountryService.fetchCountriesByAlpha3(allAplphas.toString())
-                    .then(
-                        function(d){
-                            for(var i = 0; i< d.length; i++){
-                                d[i].details = $sce.trustAsHtml(CountryService.generateDetails(d[i]));
-                            }
-                            return d;
-                        },
-                        function(errResponse){
-                            //todo error stuff
-                        }
-                    );
-            }
-        };
-    }]);
-
-    app.controller('BorderController', ['$scope', 'BorderService', function($scope, BorderService){
+    app.controller('BorderController', ['$scope', 'QueryService', function($scope, QueryService){
         var self = this;
-        self.islands = 0;
-        self.maxBorders = 0;
+        self.islands = "...";
+        self.maxBorders = "...";
         self.countries = [];
         self.relevant = [];
+        self.bordersRange = 0;
 
         self.fetchIslands = function(){
             self.fetchBorders(0).then(function(d){ self.islands= d.length;});
-            //self.islands = self.fetchBorders(0).length;
         };
 
         self.updateCountries = function(){
-            BorderService.fetchBorders(self.bordersRange)
+            QueryService.fetchOnField("border",self.bordersRange)
                 .then(
                     function(d){
                         self.countries = d;
-                        BorderService.fetchRelevant(d)
+                        var related = [];
+                        angular.forEach(d, function(country){
+                            var entries = country["borders"];
+                            angular.forEach(entries, function(relCountry){
+                                if(related.indexOf(relCountry) == -1){
+                                    related.push(relCountry);
+                                }
+                            });
+                        });
+                        QueryService.fetchCountriesByAlpha3(related.toString())
                             .then(
                                 function(d){
-                                    angular.forEach(d, function(country){
-                                        self.relevant[country.alpha3Code] = country;
+                                    self.relevant = [];
+                                    angular.forEach(d, function(relCountry){
+                                        if(related.indexOf(relCountry) == -1){
+                                            self.relevant[relCountry.alpha3Code] = relCountry;
+                                        }
                                     });
+                                },
+                                function(errResponse){
+                                    //todo error stuff
                                 }
                             );
                     }
@@ -89,7 +53,7 @@
         };
 
         self.fetchBorders = function(qty){
-            return BorderService.fetchBorders(qty)
+            return QueryService.fetchOnField("border",qty)
                 .then(
                     function(d){
                         return d;
@@ -101,7 +65,7 @@
         };
 
         self.fetchMaxBorders = function(){
-            BorderService.fetchMaxBorders()
+            QueryService.fetchMaxField("border")
                 .then(
                     function(d){
                         self.maxBorders = d;
@@ -112,7 +76,6 @@
                 );
         };
 
-        self.fetchIslands();
-        self.fetchMaxBorders();
+        self.updateCountries();
     }]);
 })();

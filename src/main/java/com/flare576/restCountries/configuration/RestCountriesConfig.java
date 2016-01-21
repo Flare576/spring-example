@@ -2,18 +2,15 @@ package com.flare576.restCountries.configuration;
 
 import com.flare576.restCountries.io.RestCountriesProxy;
 import com.flare576.restCountries.service.QueryService;
+import com.flare576.restCountries.service.QueryServiceImpl;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -57,7 +54,7 @@ public class RestCountriesConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public QueryService queryService(){
-        return new QueryService(restCountriesProxy());
+        return new QueryServiceImpl(restCountriesProxy());
     }
 
 

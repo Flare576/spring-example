@@ -1,8 +1,7 @@
 package com.flare576.restCountries.io;
 
-import com.flare576.restCountries.service.QueryService;
+import com.flare576.restCountries.model.Country;
 
-import javax.management.Query;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
