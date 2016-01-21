@@ -2,17 +2,13 @@ package com.flare576.restCountries.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flare576.restCountries.BaseTest;
-import com.flare576.restCountries.model.Country;
 import com.flare576.restCountries.io.RestCountriesProxy;
+import com.flare576.restCountries.model.Country;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.util.reflection.Whitebox;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import java.io.IOException;
 import java.util.Date;
@@ -20,9 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 /**

@@ -1,9 +1,5 @@
 package com.flare576.restCountries;
 
-import org.junit.BeforeClass;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.ContextConfiguration;
-
 import java.io.IOException;
 import java.util.Properties;
 

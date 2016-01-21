@@ -1,14 +1,17 @@
 package com.flare576.restCountries.service;
 
-import com.flare576.restCountries.model.Country;
 import com.flare576.restCountries.io.QueryResult;
 import com.flare576.restCountries.io.RestCountriesProxy;
+import com.flare576.restCountries.model.Country;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Flare576 on 1/18/2016.
