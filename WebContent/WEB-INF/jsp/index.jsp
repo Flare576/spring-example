@@ -9,6 +9,7 @@
 <html ng-app="countries">
 <head>
     <title>Nations of the World</title>
+    <base href="<%=request.getContextPath()%>/">
     <link rel="stylesheet" type="text/css" href="css/lib/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="css/lib/bootstrap-theme.min.css" />
     <script type="text/javascript" src="js/lib/angular.min.js"></script>

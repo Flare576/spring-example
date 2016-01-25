@@ -9,7 +9,7 @@
         var obj = {
             fetchMaxField: function(restName){
                 var defer = $q.defer();
-                $http.get("/v1/" + restName + "/maxQty")
+                $http.get("v1/" + restName + "/maxQty")
                     .then(
                         function(response){
                             defer.resolve(response.data);
@@ -23,7 +23,7 @@
             },
             fetchOnField: function(restName,qty){
                 var defer = $q.defer();
-                $http.get("/v1/" + restName + "/" + qty)
+                $http.get("v1/" + restName + "/" + qty)
                     .then(
                         function(response){
                             var d = response.data;
@@ -41,7 +41,7 @@
             },
             fetchCountriesByAlpha3: function(codes){
                 var defer = $q.defer();
-                $http.get("/v1/alpha?codes=" + codes)
+                $http.get("v1/alpha?codes=" + codes)
                     .then(
                         function(response){
                             var d = response.data;
