@@ -1,0 +1,44 @@
+<div ng-controller="TimezoneController as timezoneCtrl">
+    <div class="panel panel-default">
+        <div class="panel-heading"><span class="glyphicon glyphicon-info-sign"></span> Did You Know?</div>
+        <div class="panel-body">
+            There are {{timezoneCtrl.noTimezone}} countries in the world which have <strong>NO TIMEZONE</strong>! To see a list, select the lowest setting below!
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><span class="glyphicon glyphicon-info-sign"></span> Did You Know?</div>
+        <div class="panel-body">
+            The maximum number of Timezones a single country covers is {{timezoneCtrl.maxTimezones}}! To find out more, select the highest setting below!
+        </div>
+    </div>
+    <div class="slider-div">
+        <div>Countries Timezone count:</div>
+        <div class="slider-min">0</div>
+        <div class="slider-current">{{timezoneCtrl.timezoneRange}}</div>
+        <div class="slider-max">{{timezoneCtrl.maxTimezones}}</div>
+        <input
+                type="range"
+                ng-model-options='{ debounce: 500 }'
+                ng-model="timezoneCtrl.timezoneRange"
+                min="0"
+                max="{{timezoneCtrl.maxTimezones}}"
+                ng-change="timezoneCtrl.updateCountries()" />
+
+    </div>
+    <ng-pluralize count="timezoneCtrl.countries.length"
+                   when="{'0': 'No countries have {{timezoneCtrl.timezoneRange}} Timezones.',
+                     'one': '1 Country found having {{timezoneCtrl.timezoneRange}} Timezones.',
+                     'other': '{} Countries found having {{timezoneCtrl.timezoneRange}} Timezones.'}">
+    </ng-pluralize>
+    <uib-accordion>
+        <uib-accordion-group heading="{{country.name}}" ng-repeat="country in timezoneCtrl.countries">
+            <uib-accordion-heading>
+                <div uib-popover-html="country.details" popover-placement="right" popover-trigger="mouseenter">{{country.name}}</div>
+            </uib-accordion-heading>
+            Timezones: {{country.timezones.length == 0 ? "None" : ""}}
+            <div ng-repeat="timezone in country.timezones">
+                <div class="listed-country">{{timezone}}</div>
+            </div>
+        </uib-accordion-group>
+    </uib-accordion>
+</div>

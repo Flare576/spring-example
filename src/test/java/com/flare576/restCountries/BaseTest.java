@@ -1,9 +1,5 @@
 package com.flare576.restCountries;
 
-import org.junit.BeforeClass;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.ContextConfiguration;
-
 import java.io.IOException;
 import java.util.Properties;
 
@@ -22,6 +18,10 @@ public class BaseTest {
     /**
      * Some sample JSON objects for the response
      */
+
+    public static final String USA_ALPHA3 = "USA";
+    public static final String MADAGASCAR_ALPHA3 = "MDG";
+    public static final String INVALID_ALPHA3 = "XXX";
 
     public static final String MADAGASCAR_JSON = "{\n" +
             "        \"name\": \"Madagascar\",\n" +

@@ -1,0 +1,46 @@
+<div ng-controller="BorderController as borderCtrl">
+    <div class="panel panel-default">
+        <div class="panel-heading"><span class="glyphicon glyphicon-info-sign"></span> Did You Know?</div>
+        <div class="panel-body">
+            There are {{borderCtrl.islands}} island countries in the world! To see a list, select the lowest setting below!
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><span class="glyphicon glyphicon-info-sign"></span> Did You Know?</div>
+        <div class="panel-body">
+            The maximum number of countries a single country borders is {{borderCtrl.maxBorders}}! To find out more, select the highest setting below!
+        </div>
+    </div>
+
+
+    <div class="slider-div">
+        <div>Countries border count:</div>
+        <div class="slider-min">0</div>
+        <div class="slider-current">{{borderCtrl.bordersRange}}</div>
+        <div class="slider-max">{{borderCtrl.maxBorders}}</div>
+        <input
+                type="range"
+                ng-model-options='{ debounce: 500 }'
+                ng-model="borderCtrl.bordersRange"
+                min="0"
+                max="{{borderCtrl.maxBorders}}"
+                ng-change="borderCtrl.updateCountries()" />
+
+    </div>
+    <ng-pluralize count="borderCtrl.countries.length"
+                  when="{'0': 'No countries have {{borderCtrl.bordersRange}} country borders.',
+                     'one': '1 Country found having {{borderCtrl.bordersRange}} country borders.',
+                     'other': '{} Countries found having {{borderCtrl.bordersRange}} country borders.'}">
+    </ng-pluralize>
+    <uib-accordion>
+        <uib-accordion-group ng-repeat="country in borderCtrl.countries">
+            <uib-accordion-heading>
+                <div uib-popover-html="country.details" popover-placement="right" popover-trigger="mouseenter">{{country.name}}</div>
+            </uib-accordion-heading>
+            Bordering Countries: {{country.borders.length == 0 ? "None" : ""}}
+            <div ng-repeat="borderCountry in country.borders">
+                <div class="listed-country" uib-popover-html="borderCtrl.relevant[borderCountry].details" popover-placement="right" popover-trigger="mouseenter">{{borderCtrl.relevant[borderCountry].name}}</div>
+            </div>
+        </uib-accordion-group>
+    </uib-accordion>
+</div>

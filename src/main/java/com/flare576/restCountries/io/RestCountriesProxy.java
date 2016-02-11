@@ -1,46 +1,48 @@
 package com.flare576.restCountries.io;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.client.ClientProtocolException;
+import com.flare576.restCountries.model.Country;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created by Flare576 on 1/18/2016.
- *
  * This class serves as the provider of the full Countries list from the external URL provided in the properties file.
- * It maintains a cache of the list locally for a configurable period of time for two primary reasons:
+ * It maintains a cache of the list locally for a configurable period of time for three primary reasons:
  * 1. Country data is unlikely to change rapidly
- * 2. The only known provider for the data is a donation-driven website whose bandwidth is unknown
+ * 2. External calls are expensive
+ * 3. The only known provider for the data is a donation-driven website whose bandwidth is unknown
+ *
+ * Created by Flare576 on 1/18/2016.
  */
 public class RestCountriesProxy {
-    private CloseableHttpClient httpClient;
+    private final Log log = LogFactory.getLog(RestCountriesProxy.class);
+    private final CloseableHttpClient httpClient;
     @Value("${proxy.cache.minutes}")
     private String cacheMinutes;
     @Value("${proxy.external.url}")
     private String restCountriesUrl;
 
     private Date lastUpdate;
-    private Map<String, Country> countries;
-    private ObjectMapper objectMapper;
+    private final Map<String, Country> countries;
+    private final ObjectMapper objectMapper;
 
 
     @Autowired
     public RestCountriesProxy(CloseableHttpClient httpClient){
         this.httpClient = httpClient;
 
-        this.countries = new HashMap<>();
+        this.countries = new ConcurrentHashMap<>();
         lastUpdate = null;
         objectMapper = new ObjectMapper();
     }
@@ -99,10 +101,8 @@ public class RestCountriesProxy {
                 this.countries.put(country.getAlpha3Code(), country);
             }
             lastUpdate = new Date();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.warn(e);
         }
     }
 }

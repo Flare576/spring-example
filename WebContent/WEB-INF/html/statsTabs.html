@@ -1,0 +1,24 @@
+<!-- Tabs Go Here -->
+<section>
+    <ul class="nav nav-pills">
+        <li ng-class="{ active:tab.isSet(1) }">
+            <a href ng-click="tab.setTab(1)">Borders</a>
+        </li>
+        <li ng-class="{ active:tab.isSet(2) }">
+            <a href ng-click="tab.setTab(2)">TimeZones</a>
+        </li>
+        <li ng-class="{ active:tab.isSet(3) }">
+            <a href ng-click="tab.setTab(3)">Tool Info</a>
+        </li>
+    </ul>
+    <div ng-hide="errors == ''" class="panel panel-warning">
+        <div class="panel-heading">There was a problem</div>
+        <div class="panel-body">
+            {{errors}}
+        </div>
+    </div>
+    <stats-borders ng-show="tab.isSet(1)" ></stats-borders>
+    <stats-timezones ng-show="tab.isSet(2)"></stats-timezones>
+    <stats-about ng-show="tab.isSet(3)"></stats-about>
+
+</section>

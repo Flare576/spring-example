@@ -1,8 +1,10 @@
-package com.flare576.restCountries.io;
+package com.flare576.restCountries.model;
 
 import java.util.Map;
 
 /**
+ * Just a POJO
+ *
  * Created by Flare576 on 1/18/2016.
  */
 public class Country {
